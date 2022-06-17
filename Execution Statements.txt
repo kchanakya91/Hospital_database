@@ -1,0 +1,301 @@
+
+/* The following file contains the EXECUTION commands for the respective INDIVIDUAL and GROUP features */
+
+
+
+-------INDIVIDUAL FEATURES
+
+
+------ Feature 1
+set serveroutput on;
+--If person  already exists
+exec Feature1('James', 'Sloan' ,'Male', date '1999-10-23' ,'park street', 'NY','New York', 10002 , 22 ,4346567654 , 'james@gmail.com'); 
+/* If person  already exists but certain attributes need to updated. 
+It will update the phone number.
+and email address as we have changed it for the patient */ 
+exec Feature1('James', 'Sloan' ,'Male', date '1999-10-23' ,'park street', 'NY','New York', 10002 , 22 ,9823303242 , 'jjjj@gmail.com'); 
+---- If patient does not exist. It will add a new row in Patient table
+exec Feature1('Angelina', 'Jolie' ,'Female', date '2000-10-23' ,'park street', 'NY','New York', 10002 , 22 ,4346567654 , 'james@gmail.com'); 
+--If patient name exists but DOB does not. It will add a new row in Patient table
+exec Feature1('James', 'Sloan' ,'Male', date '1999-01-23' ,'park street', 'NY','New York', 10002 , 22 ,4346567654 , 'james@gmail.com'); 
+/* If patient  DOB is the same but the patient name is not. 
+It will add a new row in Patient table */
+exec Feature1('Freddrick', 'Sloan' ,'Male', date '1999-10-23' ,'park street', 'NY','New York', 10002 , 22 ,4346567654 , 'james@gmail.com'); 
+----Select Statements
+select * from Patient;
+
+
+
+------ Feature 2
+set serveroutput on;
+/* If patient  DOB is the same but the patient name is not 
+(Will provide an error message) */
+exec Feature2('Stephen', 'Sloan' , 1 , date '1999-10-23',001,'Body pain');
+---- Hospital ID being Invalid(Will provide an error message)
+exec Feature2('James', 'Sloan' , 6 , date '1999-10-23',001,'Ankle Pain');
+----- Doctor ID being Invalid(Will provide an error message)
+exec Feature2('James', 'Sloan' , 1 , date '1999-10-23',021,'Heart Conditions');
+/* Ideal Scenario (Part 1) 
+New row will be inserted in Admission Table provided we run Feature 1 first. 
+Otherwise, it will display an error that patient does not exist */
+exec Feature2('Angelina', 'Jolie' , 4 , date '2000-10-23',001,'Patient has met with an accident');
+/* Ideal Scenario (Part 2) New row will be inserted in Admission Table
+Since the patient exists */
+exec Feature2('James', 'Sloan' , 1 , date '1999-10-23',013,'Feeling Uneasy');
+----- Select Statements
+Select * from Patient;
+Select * from Admission;
+Select * from Doctor;
+Select * from Message;
+
+
+
+
+------Feature 3
+set serveroutput on;
+--ideal scenario where the hospital has the given roomtype
+exec feature3(5, TIMESTAMP '2021-10-11 6:00:00', TIMESTAMP '2021-10-11 7:50:00', 'Regular');
+select * from message;
+select * from patient_assign_room;
+--Scenario when there is no given roomtype available in the hospital (the admission belongs to). Here no rows will get inserted into any of the tables.
+exec feature3(5, TIMESTAMP '2021-10-11 6:00:00', TIMESTAMP '2021-10-11 7:50:00', 'Operating');
+select * from message;
+select * from patient_assign_room;
+--Wrong admission id
+exec feature3(55, TIMESTAMP '2021-10-11 6:00:00', TIMESTAMP '2021-10-11 7:50:00', 'Regular');
+
+
+------Feature 4
+set serveroutput on;
+/* Insert data into message and admition treatment table  */
+exec Feature4(15,1,timestamp'2021-11-24 07:00:00.00') 
+select * from ad_treat where admission_id = 15;
+select * from message;
+/* Invalid Admission ID */
+select * from admission where admission_id = 21;
+exec Feature4(21,4,timestamp'2021-11-24 07:00:00.00') 
+/* Invalid Treatment ID */
+select * from treatment;
+exec Feature4(21,6,timestamp'2021-11-24 07:00:00.00') 
+
+
+------Feature 5
+set serveroutput on;
+/* Allergy to drug recorded -- Insert*/
+select * from drug;
+select * from allergy where patient_id =2;
+exec Feature5(2,input_drug_ids(2,3,4,5,6,7,24)) 
+select * from allergy where patient_id =2;
+/* Already inserted and invalid drug ID*/
+exec Feature5(2,input_drug_ids(2,3,4,5,6,7,24))  
+/* Invalid Patient ID */
+select * from patient where patient_id = 21;
+exec Feature5(21,input_drug_ids(1)) 
+/* Invalid Drug ID */
+select * from drug;
+exec Feature5(2,input_drug_ids(7)) 
+
+------Feature 6
+set serveroutput on;
+/* Inserting these values into the respective tables so as to satisfy the conditions */
+insert into patient values (24,'Karthik','chavali','Male', date '1998-10-23', 'lake street' , 'MD','Maryland', 10002, 22, 4346567654, 'karthik@gmail.com');
+insert into DOCTOR values (24,'Ashok','Reddy','Inster Bungalow', 'California', 'San Jose', 411305 , 29, 7584736485, 'askred@yahoo.com');
+insert into NURSE values (24,1,'Tharun','Bhaskar','8500 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 34 , 6658374822, 'tarunbhaskar@gmail.com');
+insert into NURSE values (25,1,'Amruth','Rao','8510 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 35 , 6958374822, 'amruthamb@gmail.com');
+insert into ADMISSION values (24,24,1,24,timestamp'2021-10-27 15:30:00.00',timestamp'2021-10-28 22:30:00.00','ankle pain','need rest','room assigned');
+insert into shift_schedule values (6,24, timestamp '2021-10-27 15:30:00.00', timestamp '2021-10-27 22:00:00.00');
+insert into shift_schedule values (7,25, timestamp '2021-10-27 22:00:00.00', timestamp '2021-10-28 11:30:00.00');
+insert into ROOM values(122,1,'Regular','A',3);
+insert into shift_room values(06,24,122);
+insert into shift_room values(07,25,122);
+insert into patient_assign_room values(24, 122, timestamp'2021-10-27 16:00:00.00', timestamp'2021-10-28 22:30:00.00');
+--invalid drug _id (As the given drug id is not present in the drug table, it prints invalid drug Id)
+EXEC Mem4_FEATURE6_Neha(55, 1, DATE '2021-09-24', 30, 2);
+Select * from drug;
+--invalid admission_id ((As the given Admission id is not present in the Admission table, it prints invalid drug Id))
+EXEC Mem4_FEATURE6_Neha(1, 55, DATE '2021-09-24', 30, 2);
+Select * from drug;
+select * from admission;
+-- allergy condition (both drug id and admission id are valid  so it checks the corresponding patient has allergy or not)
+EXEC Mem4_FEATURE6_Neha(1, 1, DATE '2021-09-24', 30, 2);
+select * from admission;
+Select * from drug;
+Select * from allergy;
+--no allergy (if the patient has no allergy then it inserts a row in prescription and message tables)
+EXEC Mem4_FEATURE6_Neha(1, 2, DATE '2021-09-24', 30, 2);
+Select * from admission;
+Select * from drug;
+Select * from allergy;
+--we can check if a new row is inserted into prescription table
+select * from prescription;
+--we can check if a new row is inserted into message table
+select * from message;
+
+------Feature 7
+set serveroutput on;
+--nurse id is invalid- The input for the procedure is given with wrong nurse ID that does not exists in the table to check the nurse table
+exec feature7_NA(33,timestamp '2021-10-25 23:00:00');
+select * from nurse;
+select * from shift_schedule;
+select * from patient_assign_room;
+select * from shift_room;
+--nurse shift does not match with input time - it checks with the valid nurse shift that is given in the table to the input time given
+exec feature7_NA(07,timestamp '2021-10-25 17:00:00');
+select * from nurse;
+select * from shift_schedule;
+select * from patient_assign_room;
+select * from shift_room;
+-- nurse shift matches with input time - for same nurse Id it checks the nurse shift is matching with the input time given for the procedure
+exec feature7_NA(07,timestamp '2021-10-09 15:00:00');
+select * from nurse;
+select * from shift_schedule;
+select * from patient_assign_room;
+select * from shift_room;
+-- nurse shift matches with input time - for same nurse Id it checks the nurse shift is matching with the input time given for the procedure different senario
+exec feature7_NA(18,timestamp '2021-11-11 09:00:00');
+select * from nurse;
+select * from shift_schedule;
+select * from patient_assign_room;
+select * from shift_room;
+-- nurse shift matches with input time - for same nurse Id it checks the nurse shift is matching with the input time given for the procedure different senario
+exec feature7_NA(15,timestamp '2021-10-31 09:00:00');
+select * from nurse;
+select * from shift_schedule;
+select * from patient_assign_room;
+select * from shift_room;
+/
+
+------Feature 8
+set serveroutput on;
+/* invalid admission ID where 24 is not in the table. It checks if the id matchs with the current admission table and provides a message for 
+invalid admission ID print display.*/
+exec feature8_DP(24,systimestamp,'follow prescription');
+select * from message;
+select * from admission;
+select * from prescription;
+select * from treatment;
+/*if the given admission id is valid then it updates the admission table and inserts  a row in message table
+ and prints list of treatments received and prescription given during the stay at the hospital*/
+exec feature8_DP(01,systimestamp,'follow prescription');
+select * from message;
+select * from admission;
+select * from prescription;
+select * from treatment;
+/*Another case senario where only one treatment is received for given admission id which updates the admission table and inserts  a row in message table
+ and prints list of treatments received and prescription given during the stay at the hospital*/
+exec feature8_DP(02,systimestamp,'follow prescription');
+select * from message;
+select * from admission;
+select * from prescription;
+select * from treatment;
+/*Another case senario where patient is already discharged and treatment is done, we do not have any prescriptions given for him*/
+exec feature8_DP(12,systimestamp,'follow prescription');
+select * from message;
+select * from admission;
+select * from prescription;
+select * from treatment;
+/*Another case senario where patient is already discharged and treatment is done, and prescriptions mentioned for him*/
+exec feature8_DP(17,systimestamp,'Take good rest');
+select * from message;
+select * from admission;
+select * from prescription;
+select * from treatment;
+/
+
+
+
+--------------- GROUP FEATURES
+
+
+-------Feature 9
+set serveroutput on;
+--checks if a patient exits or not. 
+exec feature9_CT('James','Bond',date '1999-10-23',timestamp '2021-10-05 07:00:00');
+select * from patient_assign_room;
+select * from patient;
+select * from admission;
+select * from doctor;
+--checks if the patient has been assigned the room or not.(patient is admitted but nurse not allocated)
+exec feature9_CT('Ross','Geller',date '1991-05-26',timestamp '2021-10-09 07:00:00');
+select * from patient_assign_room;
+select * from patient;
+select * from admission;
+select * from doctor;
+--checks the condition for the same patient with different time. (patient is not in the hospital)
+exec feature9_CT('Ross','Geller',date '1991-05-26',timestamp '2021-10-09 07:00:01');
+select * from patient_assign_room;
+select * from patient;
+select * from admission;
+select * from doctor;
+--checks the condition for the the patient who assignd with doctor and nurse for the given input time.
+exec feature9_CT('Karthik','chavali',date '1998-10-23',timestamp '2021-10-27 16:00:00');
+select * from patient_assign_room;
+select * from patient;
+select * from admission;
+select * from doctor;
+
+-------Feature 10
+set serveroutput on;
+/* Valid hospital ID with 0 occupancy rate */
+exec feature10_RS(timestamp '2021-09-30 07:00:00.00',timestamp '2021-10-01 04:00:00.00',2);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+/* invalid hospital ID  condition*/
+exec feature10_RS(timestamp '2021-10-03 00:00:00.00',timestamp '2021-10-05 23:59:00.00',21);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+/* Valid hospital ID with mixed result including float - date range for hosp 3 where it shows occupancy for allocated rooms and for un used rooms*/
+exec feature10_RS(timestamp '2021-10-02 07:00:00.00',timestamp '2021-10-17 04:00:00.00',3);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+/* Valid hospital ID with mixed result including float - range decrease where occupancy is zero as there are no rooms assigned for the input time given*/
+exec feature10_RS(timestamp '2021-10-22 07:00:00.00',timestamp '2021-10-23 04:00:00.00',3);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+/* Valid hospital ID with occupancy rate is 1 for hospital 5 where one room is assigned  for the given input timestamp*/
+exec feature10_RS(timestamp '2021-10-22 07:00:00.00',timestamp '2021-10-22 23:00:00.00',5);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+/* Valid hospital ID with mixed result including float - hosp 4*/
+exec feature10_RS(timestamp '2021-10-04 07:00:00.00',timestamp '2021-10-19 04:00:00.00',4);
+select * from hospital;
+select * from room;
+select * from shift_room;
+select * from patient_assign_room;
+
+-------Feature 11
+set serveroutput on;
+select * from nurse;
+select * from shift_schedule;
+--Normal routine where the nurse's shift starts after the input startTime and ends before the input endTime
+exec Feature11(5, DATE '2021-10-24', DATE '2021-10-27');
+--Scenario where the nurse's shift starts before 8 am on the start date
+exec Feature11(1, DATE '2021-10-25', DATE '2021-10-29');
+--Scenario where the dates are way after the nurses' shift timings for the given hospital id
+exec Feature11(5, DATE '2021-12-10', DATE '2021-12-12');
+--Scenario where the dates are way before the nurses' shift timings for the given hospital id
+exec Feature11(1, DATE '2021-07-20', DATE '2021-07-22');
+--Invalid hospital id
+exec Feature11(11, DATE '2021-10-24', DATE '2021-10-27');
+
+
+-------Feature 12
+set serveroutput on;
+/* Inserting this to satisfy the conditions */
+insert into ADMISSION values (23,01,1,001,timestamp'2021-11-24 07:00:00.00',timestamp'2021-11-30 15:00:00.00','Feeling uneasy','Follow Prescription','admitted waiting for a room');
+/* Shows non zero readmission for hospital */
+select * from admission where hospital_id = 1;
+exec feature12_RA(interval '60' day);
+/* Shows zero readmission for hospital */
+exec feature12_RA(interval '4' day);
+select * from admission;

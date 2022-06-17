@@ -1,0 +1,1496 @@
+
+/* The following file contains the DROP CREATE and INSERT commands for the respective tables.
+It also contains the CREATE and REPLACE commands for the INDIVIDUAL and GROUP features. */
+
+
+drop sequence msg_sequence;
+drop sequence prid_sequence;
+drop type input_drug_ids;
+drop table message cascade constraints;
+drop table prescription cascade constraints;
+drop table allergy cascade constraints;
+drop table drug cascade constraints;
+drop table AD_TREAT cascade constraints;
+drop table patient_assign_room;
+drop table admission cascade constraints;
+drop table patient cascade constraints;
+drop table shift_room cascade constraints;
+drop table shift_schedule cascade constraints;
+drop table treatment cascade constraints;
+drop table room cascade constraints;
+drop table nurse cascade constraints;
+drop table hosp_doc cascade constraints;
+drop table doctor cascade constraints;
+drop table hospital cascade constraints;
+
+------ CREATING AND INSERTING VALUES INTO THE RESPECTIVE TABLES
+
+Create table Hospital(
+Hospital_ID int,
+Hospital_name varchar (50)NOT NULL,
+Hospital_address varchar (100),
+State varchar(30),
+city varchar (30),
+Zipcode number,
+CONSTRAINT PK_Hospital PRIMARY KEY (Hospital_ID)
+);
+insert into hospital values(1,'Newlife hospital','321 Decade Road','California','San Diego',93107);
+commit;
+insert into hospital values(2,'Rejuvenate','555 Brigade Road','Maryland','Baltimore',92114);
+commit;
+insert into hospital values(3,'Ruby Hall','703 Eastern Road','Texas','Dallas',411002);
+commit;
+insert into hospital values(4,'HealthyWave','244 Western Road','Florida','Miami',411006);
+commit;
+insert into hospital values(5,'Redstar Hospital','154 Cloud 9','Alaska','Sitka',93127);
+commit;
+
+
+
+
+Create table Doctor(
+Doctor_id int,
+Doctor_fname varchar (50)NOT NULL,
+Doctor_lname varchar (50),
+Doctor_address varchar (100),
+State varchar(30),
+city varchar (30),
+Zipcode number,
+age number NOT NULL,
+d_phno number,
+d_email varchar (30),
+CONSTRAINT PK_Doctor PRIMARY KEY (Doctor_id)
+);
+insert into DOCTOR values (001,'Lionel',' Messi','Inster Bungalow', 'California', 'San Diego', 411305 , 29, 7584736485, 'Leo@yahoo.com');
+commit;
+insert into DOCTOR values (002,'Cristiano',' Ronaldo','245 Hollister Road', 'New Jersey', 'Newark', 411206  , 29 , 8574859674, 'Cris@yahoo.com');
+commit;
+insert into DOCTOR values (003,'Neymar','Silva','168 Blue apartments', 'New Jersey', 'Newark', 411107 ,30 , 8490574800, 'Ney@gmail.com');
+commit;
+insert into DOCTOR values (004,'Paul',' Pogba','Hampton Road', 'New Jersey', 'Newark' , 93127 , 35 , 7485748394, 'PP@yepmail.com');
+commit;
+insert into DOCTOR values (005,'Kylian',' Mbappe','8562 Itle Rd', 'Arizona', 'Phoenix' , 92134 ,34 , 6458374832, 'Kylian@gmail.com');
+commit;
+insert into DOCTOR values (006,'Karthik',' Chavali','Inster Bungalow', 'California', 'San Diego', 411305 , 29, 7584736485, 'AB@yahoo.com');
+commit;
+insert into DOCTOR values (007,'Abhinav',' Dhoundiyal','245 Hollister Road', 'New Jersey', 'Newark', 411206  , 29 , 8574859674, 'CD@yahoo.com');
+commit;
+insert into DOCTOR values (008,'Sayali','Babhulgaonkar','168 Blue apartments', 'New Jersey', 'Newark', 411107 ,30 , 8490574800, 'EF@gmail.com');
+commit;
+insert into DOCTOR values (009,'Arshan',' Irani','Hampton Road', 'New Jersey', 'Newark' , 93127 , 35 , 7485748394, 'GH@yepmail.com');
+commit;
+insert into DOCTOR values (010,'Neha',' Reddy','8562 Itle Rd', 'Arizona', 'Phoenix' , 92134 ,34 , 6458374832, 'IJlian@gmail.com');
+commit;
+insert into DOCTOR values (011,'Marcos',' Alonso','Inster Bungalow', 'California', 'San Diego', 411305 , 29, 7584736485, 'KL@yahoo.com');
+commit;
+insert into DOCTOR values (012,'Thiago',' Silva','245 Hollister Road', 'New Jersey', 'Newark', 411206  , 29 , 8574859674, 'MN@yahoo.com');
+commit;
+insert into DOCTOR values (013,'Marco','Assensio','168 Blue apartments', 'New Jersey', 'Newark', 411107 ,30 , 8490574800, 'PQ@gmail.com');
+commit;
+insert into DOCTOR values (014,'Sergio',' Ramos','Hampton Road', 'New Jersey', 'Newark' , 93127 , 35 , 7485748394, 'RS@yepmail.com');
+commit;
+insert into DOCTOR values (015,'Vincent',' Kompany','8562 Itle Rd', 'Arizona', 'Phoenix' , 92134 ,34 , 6458374832, 'TUlian@gmail.com');
+commit;
+insert into DOCTOR values (016,'Victor',' Valdes','Inster Bungalow', 'California', 'San Diego', 411305 , 29, 7584736485, 'VW@yahoo.com');
+commit;
+insert into DOCTOR values (017,'Harry',' Kane','245 Hollister Road', 'New Jersey', 'Newark', 411206  , 29 , 8574859674, 'XY@yahoo.com');
+commit;
+insert into DOCTOR values (018,'Raheem','Sterling','168 Blue apartments', 'New Jersey', 'Newark', 411107 ,30 , 8490574800, 'ZA@gmail.com');
+commit;
+insert into DOCTOR values (019,'Carlos',' Puyol','Hampton Road', 'New Jersey', 'Newark' , 93127 , 35 , 7485748394, 'AA@yepmail.com');
+commit;
+insert into DOCTOR values (020,'Steven',' Gerrard','8562 Itle Rd', 'Arizona', 'Phoenix' , 92134 ,34 , 6458374832, 'ABC@gmail.com');
+commit;
+
+
+create table hosp_doc( ------ One doctor can be affiliated with multiple hospitals
+Hospital_ID int,
+Doctor_id int,
+CONSTRAINT PK_hosp_doc PRIMARY KEY(Hospital_ID,Doctor_id),
+FOREIGN KEY (Hospital_ID) REFERENCES hospital(Hospital_ID),
+FOREIGN KEY (Doctor_id) REFERENCES Doctor(Doctor_id)
+);
+insert into hosp_doc values(1,012);
+commit;
+insert into hosp_doc values(4,001);
+commit;
+insert into hosp_doc values(1,007);
+commit;
+insert into hosp_doc values(5,018);
+commit;
+insert into hosp_doc values(1,003);
+commit;
+insert into hosp_doc values(3,010);
+commit;
+insert into hosp_doc values(5,013);
+commit;
+insert into hosp_doc values(1,004);
+commit;
+insert into hosp_doc values(3,009);
+commit;
+insert into hosp_doc values(4,020);
+commit;
+insert into hosp_doc values(2,001);
+commit;
+insert into hosp_doc values(2,010);
+commit;
+insert into hosp_doc values(1,013);
+commit;
+insert into hosp_doc values(2,013);
+commit;
+insert into hosp_doc values(3,003);
+commit;
+insert into hosp_doc values(1,001);
+commit;
+insert into hosp_doc values(2,002);
+commit;
+insert into hosp_doc values(4,004);
+commit;
+insert into hosp_doc values(5,005);
+commit;
+insert into hosp_doc values (1,006);
+commit;
+insert into hosp_doc values (2,007);
+commit;
+insert into hosp_doc values (3,008);
+commit;
+insert into hosp_doc values (4,009);
+commit;
+insert into hosp_doc values (5,010);
+commit;
+insert into hosp_doc values (1,011);
+commit;
+insert into hosp_doc values (2,012);
+commit;
+insert into hosp_doc values (3,013);
+commit;
+insert into hosp_doc values (4,014);
+commit;
+insert into hosp_doc values (5,015);
+commit;
+insert into hosp_doc values (1,016);
+commit;
+insert into hosp_doc values (2,017);
+commit;
+insert into hosp_doc values (3,018);
+commit;
+insert into hosp_doc values (4,019);
+commit;
+insert into hosp_doc values (5,020);
+commit;
+
+
+Create table Nurse(
+Nurse_ID int,
+Hospital_ID int,
+Nurse_fname varchar (50)NOT NULL,
+Nurse_lname varchar (50),
+Nurse_address varchar (100),
+State varchar(30),
+city varchar (30),
+Zipcode number,
+age number,
+n_phno number,
+n_email varchar (30),
+CONSTRAINT PK_Nurse PRIMARY KEY (Nurse_ID),
+FOREIGN KEY (Hospital_ID) REFERENCES hospital(Hospital_ID)
+);
+insert into NURSE values (01,1,'Deepika','Padukone','8500 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 34 , 6458374832, 'Deepika@gmail.com');
+commit;
+insert into NURSE values (02,2,'Alia',' Bhatt','2891 Gordon St', 'Maryland', 'Baltimore' , 92012 , 33 , 7378483783, 'abc@yahoo.com');
+commit;
+insert into NURSE values (03,3, 'Tamanna',' Bhatia','Strange Road', 'Maryland', 'Baltimore', 93921 , 33 , 7584374857, 'def@gmail.com');
+commit;
+insert into NURSE values (04,4,'Nargis','Fakhri','B-102 Acropolice Enclave', 'Alaska', 'Sitka', 411502 , 32 , 9463728364, 'ghi@yahoo.com');
+commit;
+insert into NURSE values (05,5,'Kajol','Devgan','174 Seafalas ', 'Alaska', 'Sitka', 411803  , 31 , 6475647384, 'jkl@yahoo.com');
+commit;
+insert into NURSE values (06,1,'Karishma','Kapoor','8500 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 34 , 6458374832, 'mno@gmail.com');
+commit;
+insert into NURSE values (07,2,'Mukesh','Ambani','2891 Gordon St', 'Maryland', 'Baltimore' , 92012 , 33 , 7378483783, 'sqr@yahoo.com');
+commit;
+insert into NURSE values (08,3, 'Pawan',' Pepe','Strange Road', 'Maryland', 'Baltimore', 93921 , 33 , 7584374857, 'r123@gmail.com');
+commit;
+insert into NURSE values (09,4,'Ranveer','Singh','B-102 Acropolice Enclave', 'Alaska', 'Sitka', 411502 , 32 , 9463728364, 't234@yahoo.com');
+commit;
+insert into NURSE values (010,5,'Ranbir',' Kapoor','174 Seafalas ', 'Alaska', 'Sitka', 411803  , 31 , 6475647384, 'k345@yahoo.com');
+commit;
+insert into NURSE values (011,1,'Payal',' Cancelo','8500 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 34 , 6458374832, 'm455@gmail.com');
+commit;
+insert into NURSE values (012,2,'Anushka',' Kane','2891 Gordon St', 'Maryland', 'Baltimore' , 92012 , 33 , 7378483783, 'n789@yahoo.com');
+commit;
+insert into NURSE values (013,3, 'Kylie',' Jenner','Strange Road', 'Maryland', 'Baltimore', 93921 , 33 , 7584374857, 'm765@gmail.com');
+commit;
+insert into NURSE values (014,4,'Kendall','Jenner','B-102 Acropolice Enclave', 'Alaska', 'Sitka', 411502 , 32 , 9463728364, 'b432@yahoo.com');
+commit;
+insert into NURSE values (015,5,'Kim',' Kardashian','174 Seafalas ', 'Alaska', 'Sitka', 411803  , 31 , 6475647384, 'v321@yahoo.com');
+commit;
+insert into NURSE values (016,1,'Courtney','Kardashian','8500 Barbara Rd', 'Maryland', 'Baltimore' , 92134 , 34 , 6458374832, 'o675@gmail.com');
+commit;
+insert into NURSE values (017,2,'Rachel',' Green','2891 Gordon St', 'Maryland', 'Baltimore' , 92012 , 33 , 7378483783, 'f344@yahoo.com');
+commit;
+insert into NURSE values (018,3, 'Anna',' Ray','Strange Road', 'Maryland', 'Baltimore', 93921 , 33 , 7584374857, 'h346@gmail.com');
+commit;
+insert into NURSE values (019,4,'Joey',' Tribi','B-102 Acropolice Enclave', 'Alaska', 'Sitka', 411502 , 32 , 9463728364, 'u345@yahoo.com');
+commit;
+insert into NURSE values (020,5,'Monica',' Bing','174 Seafalas ', 'Alaska', 'Sitka', 411803  , 31 , 6475647384, 'z234@yahoo.com');
+commit;
+
+
+
+
+Create table Room(
+Room_num int,
+Hospital_ID int,
+Room_type varchar (30)NOT NULL,
+Building char,
+Floor number,
+CONSTRAINT PK_Room PRIMARY KEY (Room_num),
+FOREIGN KEY (Hospital_ID) REFERENCES hospital(Hospital_ID)
+);
+insert into ROOM values(101,1,'Regular','A',1);
+commit;
+insert into ROOM values(201,2,'Operating','B',2);
+commit;
+insert into ROOM values(301,3,'ICU','C',3);
+commit;
+insert into ROOM values(401,4,'ICU','D',4);
+commit;
+insert into ROOM values(505,5,'Regular','E',5);
+commit;
+insert into ROOM values(105,1,'Regular','A',2);
+commit;
+insert into ROOM values(202,2,'Operating','B',2);
+commit;
+insert into ROOM values(307,3,'ICU','C',3);
+commit;
+insert into ROOM values(404,4,'ICU','D',4);
+commit;
+insert into ROOM values(508,5,'Regular','E',5);
+commit;
+insert into ROOM values(103,1,'Regular','A',3);
+commit;
+insert into ROOM values(203,2,'Operating','B',3);
+commit;
+insert into ROOM values(306,3,'ICU','C',4);
+commit;
+insert into ROOM values(402,4,'ICU','D',4);
+commit;
+insert into ROOM values(501,5,'Regular','E',5);
+commit;
+insert into ROOM values(108,1,'Regular','A',4);
+commit;
+insert into ROOM values(209,2,'Operating','B',2);
+commit;
+insert into ROOM values(303,3,'ICU','C',4);
+commit;
+insert into ROOM values(409,4,'ICU','D',4);
+commit;
+insert into ROOM values(509,5,'Regular','E',5);
+commit;
+
+
+
+Create table Treatment(
+Treatment_ID int,
+Treatment_name varchar (50)NOT NULL,
+CONSTRAINT PK_Treatment PRIMARY KEY (Treatment_ID)
+);
+insert into TREATMENT values(1,'Ankle surgery');
+commit;
+insert into TREATMENT values(2,'Full body anesthesia');
+commit;
+insert into TREATMENT values(3,'Intensive care');
+commit;
+insert into TREATMENT values(4,'X-Ray');
+commit;
+insert into TREATMENT values(5,'Chemotherapy');
+commit;
+
+
+Create table shift_schedule(
+Shift_id int,
+NURSE_id int ,
+Start_time timestamp,
+End_time timestamp,
+CONSTRAINT PK_shift_schedule PRIMARY KEY (Shift_id),
+foreign key (NURSE_id) references nurse (NURSE_id)
+);
+insert into shift_schedule values (1,01, timestamp '2021-10-01 07:00:00.00', timestamp '2021-10-08 15:00:00.00');
+commit;
+insert into shift_schedule values (2,07,timestamp '2021-10-09 07:00:00.00', timestamp '2021-10-19 16:00:00.00');
+commit;
+insert into shift_schedule values (3,010, timestamp '2021-10-20 07:00:00.00', timestamp '2021-10-30 17:00:00.00');
+commit;
+insert into shift_schedule values (4,015, timestamp '2021-10-31 06:00:00.00', timestamp '2021-11-07 15:00:00.00');
+commit;
+insert into shift_schedule values (5,018, timestamp '2021-11-08 15:00:00.00', timestamp '2021-11-11 22:00:00.00');
+commit;
+
+
+
+create table shift_room( ----- One nurse can be assigned to multiple rooms in a  shift
+Shift_id int,
+Nurse_ID int,
+Room_num int,
+CONSTRAINT PK_shift_room PRIMARY KEY (Shift_id,Nurse_ID,Room_num),
+FOREIGN KEY (Shift_ID) REFERENCES shift_schedule(Shift_ID),
+FOREIGN KEY (Nurse_ID) REFERENCES Nurse(Nurse_ID),
+FOREIGN KEY (Room_num) REFERENCES Room(Room_num)
+);
+insert into shift_room values(1,01,101);
+commit;
+insert into shift_room values(1,02,201);
+commit;
+insert into shift_room values(1,01,105);
+commit;
+insert into shift_room values(2,02,203);
+commit;
+insert into shift_room values(2,010,301);
+commit;
+insert into shift_room values(3,011,101);
+commit;
+insert into shift_room values(3,011,103);
+commit;
+insert into shift_room values(4,010,307);
+commit;
+insert into shift_room values(4,013,301);
+commit;
+insert into shift_room values(5,014,401);
+commit;
+insert into shift_room values(5,013,303);
+commit;
+insert into shift_room values(5,014,404);
+commit;
+insert into shift_room values(1,020,508);
+commit;
+insert into shift_room values(4,014,101);
+commit;
+insert into shift_room values(5,020,505);
+commit;
+insert into shift_room values (1,1,501);
+commit;
+insert into shift_room values (2,7,101);
+commit;
+insert into shift_room values (3,10,103);
+commit;
+insert into shift_room values (4,15,401);
+commit;
+insert into shift_room values (5,18,103);
+commit;
+
+
+
+
+Create table Patient(
+Patient_ID int,
+Patient_fname varchar(50)NOT NULL,
+Patient_lname varchar(50),
+Gender varchar (10),
+DOB date,
+P_address varchar (100),
+State varchar(30),
+City varchar (30),
+Zipcode number,
+Age number,
+P_phno number,
+P_email varchar (30),
+CONSTRAINT PK_patient PRIMARY KEY (Patient_ID)
+);
+insert into patient values (01,'James','Sloan','Male', date '1999-10-23', 'park street' , 'NY','New york', 10002, 22, 4346567654, 'james@gmail.com');
+commit;
+insert into patient values (02,'Steve','Jobs','Male' , date '1998-11-22', 'farm street' , 'FL','Orlando', 32004, 23, 6676567654, 'stevejb@gmail.com');
+commit;
+insert into patient values (03,'Arwen','Cohan','Male' , date '1995-07-13', 'sheraton street' , 'TX','Houston', 76010, 26, 4376569876, 'cohan@gmail.com');
+commit;
+insert into patient values (04,'Ross','Geller','Male' , date '1991-05-26', 'pike street' , 'MD','Ellicot City', 21226, 30, 4946569654, 'geller3@gmail.com');
+commit;
+insert into patient values (05,'Rachel','Green','Male' , date '1990-09-15', 'allison street' , 'NY','New york', 10002, 31, 9896569604, 'chenman@gmail.com');
+commit;
+insert into patient values (06,'Hitesh','Sloan','Male', date '1999-10-23', 'park street' , 'NY','New york', 10002, 22, 4346567654, 'aa@gmail.com');
+commit;
+insert into patient values (07,'Manish','Jobs','Male' , date '1998-11-22', 'farm street' , 'FL','Orlando', 32004, 23, 6676567654, 'bb@gmail.com');
+commit;
+insert into patient values (08,'Ritesh','Cohan','Male' , date '1995-07-13', 'sheraton street' , 'TX','Houston', 76010, 26, 4376569876, 'cc@gmail.com');
+commit;
+insert into patient values (09,'Suresh','Geller','Male' , date '1991-05-26', 'pike street' , 'MD','Ellicot City', 21226, 30, 4946569654, 'dd@gmail.com');
+commit;
+insert into patient values (010,'Mahesh','Green','Male' , date '1990-09-15', 'allison street' , 'NY','New york', 10002, 31, 9896569604, 'che@gmail.com');
+commit;
+insert into patient values (011,'Rajesh','Sloan','Male', date '1999-10-23', 'park street' , 'NY','New york', 10002, 22, 4346567654, 'ee@gmail.com');
+commit;
+insert into patient values (012,'Sarvesh','Jobs','Male' , date '1998-11-22', 'farm street' , 'FL','Orlando', 32004, 23, 6676567654, 'ff@gmail.com');
+commit;
+insert into patient values (013,'Rupesh','Cohan','Male' , date '1995-07-13', 'sheraton street' , 'TX','Houston', 76010, 26, 4376569876, 'hh@gmail.com');
+commit;
+insert into patient values (014,'Josh','Geller','Male' , date '1991-05-26', 'pike street' , 'MD','Ellicot City', 21226, 30, 4946569654, 'yy3@gmail.com');
+commit;
+insert into patient values (015,'Keenin','Green','Male' , date '1990-09-15', 'allison street' , 'NY','New york', 10002, 31, 9896569604, 'kk@gmail.com');
+commit;
+insert into patient values (016,'Kelly','Sloan','Male', date '1999-10-23', 'park street' , 'NY','New york', 10002, 22, 4346567654, 'll@gmail.com');
+commit;
+insert into patient values (017,'Ken','Jobs','Male' , date '1998-11-22', 'farm street' , 'FL','Orlando', 32004, 23, 6676567654, 'qq@gmail.com');
+commit;
+insert into patient values (018,'Jack','Cohan','Male' , date '1995-07-13', 'sheraton street' , 'TX','Houston', 76010, 26, 4376569876, 'yy@gmail.com');
+commit;
+insert into patient values (019,'David','Geller','Male' , date '1991-05-26', 'pike street' , 'MD','Ellicot City', 21226, 30, 4946569654, 'ge3@gmail.com');
+commit;
+insert into patient values (020,'Mike','Green','Male' , date '1990-09-15', 'allison street' , 'NY','New york', 10002, 31, 9896569604, 'nman@gmail.com');
+commit;
+
+
+Create table Admission(
+Admission_ID int,
+Patient_ID int,
+Hospital_ID int,
+Doctor_id int,
+Ad_date timestamp,
+Dis_date timestamp,
+Reason varchar (100),
+Discharge_note varchar (100),
+Status varchar(50),
+CONSTRAINT PK_Admission PRIMARY KEY (Admission_ID),
+FOREIGN KEY (Patient_ID) REFERENCES Patient(Patient_ID),
+FOREIGN KEY (Hospital_ID) REFERENCES hospital(Hospital_ID),
+FOREIGN KEY (Doctor_id) REFERENCES Doctor(Doctor_id)
+);
+insert into ADMISSION values (01,01,1,001,timestamp'2021-10-01 07:00:00.00',timestamp'2021-10-03 15:00:00.00','Feeling uneasy','Follow Prescription','admitted waiting for a room');
+commit;
+insert into ADMISSION values (02,02,2,002,timestamp'2021-10-03 07:00:00.00',timestamp'2021-10-05 16:00:00.00','Ankle pain','Take good rest','room discharged');
+commit;
+insert into ADMISSION values (03,03,3, 003,timestamp'2021-10-05 07:00:00.00',timestamp'2021-10-07 17:00:00.00','Feeling uneasy','Patient needs to come for weekly checkups','admitted waiting for a room');
+commit;
+insert into ADMISSION values (04,04,4,004,timestamp'2021-10-07 15:00:00.00',timestamp'2021-10-09 07:00:00.00 ','Heart conditions','No problem with the patient','room assigned');
+commit;
+insert into ADMISSION values (05,05,5,005,timestamp'2021-10-10 15:00:00.00',timestamp'2021-10-12 07:00:00.00','Ankle pain','Continue with physiological therapy','admitted waiting for a room');
+commit;
+insert into ADMISSION values (06,06,1,006,timestamp'2021-10-12 17:00:00.00',timestamp'2021-10-14 07:00:00.00','Patient has met with an accident','Follow Prescription','admitted waiting for a room');
+commit;
+insert into ADMISSION values (07,07,2,007,timestamp'2021-10-14 17:00:00.00',timestamp'2021-10-16 07:00:00.00','Heart conditions','Take good rest','room discharged');
+commit;
+insert into ADMISSION values (08,08,3, 008,timestamp'2021-10-16 06:00:00.00',timestamp'2021-10-18 07:00:00.00','Patient has met with an accident','Patient needs to come for weekly checkups','admitted waiting for a room');
+commit;
+insert into ADMISSION values (09,09,4,009,timestamp'2021-10-18 08:00:00.00',timestamp'2021-10-20 07:00:00.00','Feeling uneasy','Breathing problems may occur','room assigned');
+commit;
+insert into ADMISSION values (010,010,5,010,timestamp'2021-10-20 08:00:00.00',timestamp'2021-10-22 07:00:00.00','Heart conditions','No problem with the patient','admitted waiting for a room');
+commit;
+insert into ADMISSION values (011,011,1,011,timestamp'2021-10-22 08:00:00.00',timestamp'2021-10-24 07:00:00.00','Ankle pain','Come by for weekly blood tests','admitted waiting for a room');
+commit;
+insert into ADMISSION values (012,012,2,012,timestamp'2021-10-24 09:00:00.00',timestamp'2021-10-26 07:00:00.00','Heart conditions','Continue with physiological therapy','room discharged');
+commit;
+insert into ADMISSION values (013,013,3,013,timestamp'2021-10-26 09:00:00.00',timestamp'2021-10-28 15:00:00.00','Ankle pain','Take good rest','admitted waiting for a room');
+commit;
+insert into ADMISSION values (014,014,4,014,timestamp'2021-10-28 10:00:00.00',timestamp'2021-10-30 07:00:00.00','Patient has met with an accident','Continue with physiological therapy','room assigned');
+commit;
+insert into ADMISSION values (015,015,5,015,timestamp'2021-10-30 11:00:00.00',timestamp'2021-11-01 07:00:00.00','Feeling uneasy','Take good rest','admitted waiting for a room');
+commit;
+insert into ADMISSION values (016,016,1,016,timestamp'2021-11-01 12:00:00.00',timestamp'2021-11-03 07:00:00.00','Heart conditions','Follow Prescription','admitted waiting for a room');
+commit;
+insert into ADMISSION values (017,017,2,017,timestamp'2021-11-03 13:00:00.00',timestamp'2021-11-05 07:00:00.00','Ankle pain','Take good rest','room discharged');
+commit;
+insert into ADMISSION values (018,018,3,018,timestamp'2021-11-05 14:00:00.00',timestamp'2021-11-07 07:00:00.00','Ankle pain','Continue with physiological therapy','admitted waiting for a room');
+commit;
+insert into ADMISSION values (019,019,4,019,timestamp'2021-11-07 15:00:00.00',timestamp'2021-11-09 09:00:00.00','Feeling uneasy','Take good rest','room assigned');
+commit;
+insert into ADMISSION values (020,020,5,020,timestamp'2021-11-09 16:00:00.00',timestamp'2021-11-11 08:00:00.00','Ankle pain','Continue with physiological therapy','admitted waiting for a room');
+commit;
+
+create table patient_assign_room( ------ One patient can be assigned to multiple rooms.
+Admission_ID int ,
+Room_num int,
+Room_start_time timestamp,
+Room_end_time timestamp,
+CONSTRAINT PK_patient_assign_room PRIMARY KEY (Admission_ID,Room_num,Room_start_time),
+FOREIGN KEY (Room_num) REFERENCES Room(Room_num),
+FOREIGN KEY (Admission_ID) references Admission (Admission_ID)
+);
+insert into patient_assign_room values(01, 101, timestamp'2021-10-01 07:00:00.00', timestamp'2021-10-02 07:00:00.00');
+commit;
+insert into patient_assign_room values(01, 105, timestamp'2021-10-02 07:00:00.00',timestamp'2021-10-03 15:00:00.00');
+commit;
+insert into patient_assign_room values(02, 201, timestamp'2021-10-03 07:00:00.00',timestamp'2021-10-04 07:00:00.00');
+commit;
+insert into patient_assign_room values(02, 202, timestamp'2021-10-04 08:00:00.00',timestamp'2021-10-05 16:00:00.00');
+commit;
+insert into patient_assign_room values(03, 301, timestamp'2021-10-05 07:00:00.00',timestamp'2021-10-06 07:00:00.00');
+commit;
+insert into patient_assign_room values(03, 307, timestamp'2021-10-06 09:00:00.00',timestamp'2021-10-07 17:00:00.00');
+commit;
+insert into patient_assign_room values(04, 401, timestamp'2021-10-07 15:00:00.00',timestamp'2021-10-08 07:00:00.00');
+commit;
+insert into patient_assign_room values(04, 402, timestamp'2021-10-08 08:00:00.00',timestamp'2021-10-09 07:00:00.00');
+commit;
+insert into patient_assign_room values(05, 505, timestamp'2021-10-10 15:00:00.00',timestamp'2021-10-11 07:00:00.00');
+commit;
+insert into patient_assign_room values(05, 508, timestamp'2021-10-11 08:00:00.00',timestamp'2021-10-12 07:00:00.00');
+commit;
+insert into patient_assign_room values(06, 105, timestamp'2021-10-12 17:00:00.00',timestamp'2021-10-13 07:00:00.00');
+commit;
+insert into patient_assign_room values(06, 103, timestamp'2021-10-13 08:00:00.00',timestamp'2021-10-14 07:00:00.00');
+commit;
+insert into patient_assign_room values(07, 202, timestamp'2021-10-14 17:00:00.00',timestamp'2021-10-15 15:00:00.00');
+commit;
+insert into patient_assign_room values(07, 203, timestamp'2021-10-15 08:00:00.00',timestamp'2021-10-16 07:00:00.00');
+commit;
+insert into patient_assign_room values(08, 307, timestamp'2021-10-16 06:00:00.00',timestamp'2021-10-17 15:00:00.00');
+commit;
+insert into patient_assign_room values(08, 303, timestamp'2021-10-17 08:00:00.00',timestamp'2021-10-18 07:00:00.00');
+commit;
+insert into patient_assign_room values(09, 402, timestamp'2021-10-18 08:00:00.00',timestamp'2021-10-19 07:00:00.00');
+commit;
+insert into patient_assign_room values(09, 409, timestamp'2021-10-19 08:00:00.00',timestamp'2021-10-20 07:00:00.00');
+commit;
+insert into patient_assign_room values(010, 509, timestamp'2021-10-20 08:00:00.00',timestamp'2021-10-21 15:00:00.00');
+commit;
+insert into patient_assign_room values(010, 501, timestamp'2021-10-21 08:00:00.00',timestamp'2021-10-22 07:00:00.00');
+commit;
+
+
+
+CREATE TABLE AD_TREAT( ------ One admission can have multiple treatments
+ADMISSION_ID int,
+TREATMENT_ID int,
+Treat_Date timestamp,
+CONSTRAINT PK_AD_TREAT PRIMARY KEY(ADMISSION_ID,TREATMENT_ID),
+FOREIGN KEY (ADMISSION_ID) REFERENCES ADMISSION(ADMISSION_ID),
+FOREIGN KEY (TREATMENT_ID) REFERENCES TREATMENT(TREATMENT_ID)
+);
+insert into AD_TREAT values(01,1,timestamp '2021-10-01 07:00:00.00');
+commit;
+insert into AD_TREAT values(02,2,timestamp '2021-10-04 07:00:00.00');
+commit;
+insert into AD_TREAT values(01,2,timestamp '2021-10-02 07:00:00.00');
+commit;
+insert into AD_TREAT values(010,1,timestamp '2021-10-20 07:00:00.00');
+commit;
+insert into AD_TREAT values(012,2,timestamp '2021-10-24 07:00:00.00');
+commit;
+insert into AD_TREAT values(013,5,timestamp '2021-10-26 07:00:00.00');
+commit;
+insert into AD_TREAT values(09,5,timestamp '2021-10-18 07:00:00.00');
+commit;
+insert into AD_TREAT values(010,3,timestamp '2021-10-21 07:00:00.00');
+commit;
+insert into AD_TREAT values(09,4,timestamp '2021-10-19 07:00:00.00');
+commit;
+insert into AD_TREAT values(013,2,timestamp '2021-10-28 07:00:00.00');
+commit;
+insert into AD_TREAT values(012,5,timestamp '2021-10-25 07:00:00.00');
+commit;
+insert into AD_TREAT values(011,5,timestamp '2021-10-22 07:00:00.00');
+commit;
+insert into AD_TREAT values(01,5,timestamp '2021-10-03 07:00:00.00');
+commit;
+insert into AD_TREAT values(011,2,timestamp '2021-10-23 07:00:00.00');
+commit;
+insert into AD_TREAT values(013,1,timestamp '2021-10-28 07:00:00.00');
+commit;
+
+
+
+
+
+Create table drug(
+Drug_ID int,
+Drug_name varchar (20) NOT NULL,
+Dosage varchar (10),
+Per_day_intake number,
+CONSTRAINT PK_drug PRIMARY KEY (drug_ID)
+);
+insert into drug values (1,'Ativan','250 mg',2);
+commit;
+insert into drug values (2,'Amoxicillin','400 mg',2);
+commit;
+insert into drug values (3,'Acetaminophen','650 mg',3);
+commit;
+insert into drug values (4,'Azithromycin','350 mg',1);
+commit;
+insert into drug values (5,'Decadron','250 mg',2);
+commit;
+
+
+
+Create table Allergy(
+Patient_ID int,
+Drug_ID int,
+Severity varchar (10),
+CONSTRAINT PK_Allergy PRIMARY KEY(Patient_ID,Drug_ID),
+FOREIGN KEY (Patient_ID) REFERENCES patient(Patient_ID),
+FOREIGN KEY (Drug_ID) REFERENCES drug(Drug_ID));
+insert into allergy values (01,1,'Critical');
+commit;
+insert into allergy values (05,2,'high');
+commit;
+insert into allergy values (07,3,'low');
+commit;
+insert into allergy values (010,4,'medium');
+commit;
+insert into allergy values (013,5,'low');
+commit;
+insert into allergy values (09,3,'Critical');
+commit;
+insert into allergy values (05,1,'high');
+commit;
+insert into allergy values (07,2,'low');
+commit;
+insert into allergy values (08,4,'medium');
+commit;
+insert into allergy values (010,5,'low');
+commit;
+insert into allergy values (019,1,'Critical');
+commit;
+insert into allergy values (07,5,'high');
+commit;
+insert into allergy values (06,3,'low');
+commit;
+insert into allergy values (05,4,'medium');
+commit;
+insert into allergy values (03,5,'low');
+commit;
+insert into allergy values (01,5,'Critical');
+commit;
+insert into allergy values (06,2,'high');
+commit;
+insert into allergy values (03,3,'low');
+commit;
+insert into allergy values (017,4,'medium');
+commit;
+insert into allergy values (019,5,'low');
+commit;
+
+
+
+
+Create table Prescription(
+Presc_ID int,
+Drug_ID int,
+Admission_ID int,
+Patient_id int,
+date_of_prescription date,
+Drug_duration number,
+No_of_refills number,
+CONSTRAINT PK_prescription PRIMARY KEY (Presc_ID),
+FOREIGN KEY (Drug_ID) REFERENCES drug(Drug_ID),
+FOREIGN KEY (Patient_id) REFERENCES patient(Patient_id),
+FOREIGN KEY (Admission_id) REFERENCES Admission(Admission_ID));
+
+insert into prescription VALUES (1,1,01,01, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(2,2,02,02, date '2021-09-24', 10, 2);
+commit;
+insert into prescription VALUES (3,3,03,03, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(4,4,04,04, date '2021-09-24', 20, 2);
+commit;
+insert into prescription VALUES(5,5,05,05, date '2021-09-24', 15, 2);
+commit;
+insert into prescription VALUES (6,1,020,020, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(7,2,019,019, date '2021-09-24', 10, 2);
+commit;
+insert into prescription VALUES (8,3,018,018, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(9,4,017,017, date '2021-09-24', 20, 2);
+commit;
+insert into prescription VALUES(10,5,016,016, date '2021-09-24', 15, 2);
+commit;
+insert into prescription VALUES (11,1,015,015, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(12,2,014,014, date '2021-09-24', 10, 2);
+commit;
+insert into prescription VALUES (13,3,07,07, date '2021-09-24', 30, 2);
+commit;
+insert into prescription VALUES(14,4,08,08, date '2021-09-24', 20, 2);
+commit;
+insert into prescription VALUES(15,5,09,09, date '2021-09-24', 15, 2);
+commit;
+
+create sequence prid_sequence 
+start with 16;
+
+Create table message(
+Message_id int,
+Doctor_id int,
+Patient_id int,
+Message varchar (300),
+Message_time timestamp,
+CONSTRAINT PK_pmessage PRIMARY KEY (Message_id),
+FOREIGN KEY (Doctor_id) REFERENCES doctor(Doctor_id),
+FOREIGN KEY (Patient_id) REFERENCES patient(Patient_id));
+
+create sequence msg_sequence
+start with 1;
+
+CREATE Or REPLACE type input_drug_ids IS VARRAY(10) OF int;
+/
+
+
+
+--------- PROCEDURES [INDIVIDUAL AND GROUP FEATURES]
+
+
+------ Feature 1
+CREATE OR REPLACE PROCEDURE Feature1 
+(add_fname     IN VARCHAR,
+add_lname     IN VARCHAR,
+add_gender    IN VARCHAR,
+add_DOB       IN DATE,
+add_address   IN VARCHAR,
+add_state     IN VARCHAR,
+add_city      IN VARCHAR,
+add_zipcode   IN INTEGER,
+add_age       IN INTEGER,
+add_phone     IN INT,
+add_email     IN VARCHAR)
+IS
+    patient_exists   INT:=0;
+    p_id             INT;
+BEGIN
+    SELECT COUNT (*) --check if a person already exists with same name and DOB
+      INTO patient_exists
+      FROM patient
+      WHERE patient_fname = add_fname
+      AND patient_lname = add_lname
+      AND DOB = add_DOB;
+
+    
+    IF patient_exists > 0
+    THEN
+        DBMS_OUTPUT.put_line ('Patient already exists! Provided information has been updated as well');
+
+        UPDATE patient ---- Updating the patient details if other information does not match
+           SET P_ADDRESS = add_address,
+               STATE = add_state,
+               CITY = add_city,
+               ZIPCODE = add_zipcode,
+               P_PHNO = add_phone,
+               P_EMAIL = add_email
+               WHERE  patient_fname = add_fname
+               AND patient_lname = add_lname
+               AND DOB = add_DOB;
+    ELSE ----- If all conditions satisfy, we insert a new row for a new patient
+        select max(patient_id) into p_id from patient;
+    insert into patient values (p_id+1,add_fname,
+    add_lname,add_gender,add_DOB,
+    add_address,add_state,add_city,
+    add_zipcode,add_age,
+    add_phone,add_email);
+
+        DBMS_OUTPUT.put_line (
+               'A new patient by the name of '
+               || add_fname
+               || ' '
+               || add_lname
+               || ' has been added with a new patient ID');
+    END IF;
+    
+    Commit;
+    
+END Feature1;
+/
+
+
+
+----Feature 2
+CREATE OR REPLACE PROCEDURE Feature2 
+(add_fname      IN VARCHAR,
+add_lname       IN VARCHAR,
+add_hospid_id   IN INTEGER,
+add_DOB         IN DATE,
+add_doctor_id   IN INTEGER,
+add_reason      IN VARCHAR)
+IS
+    patient_exists     INT;
+    hospital_exists    INT;
+    doctor_exists      INT;
+    ln_patient_id      INT;
+    p_msg_id           INT;
+    p_add_id           NUMBER;
+    lv_meesage         VARCHAR (1000);
+    lv_doctor_name     VARCHAR (50);
+    lv_hospital_name   VARCHAR (50);
+    h_name             VARCHAR  (50);
+    d_name             VARCHAR  (50);
+BEGIN
+    BEGIN 
+        SELECT patient_id --check if a person already exists with same name and DOB
+          INTO ln_patient_id
+          FROM patient
+         WHERE     patient_fname = add_fname
+         AND 	  patient_lname = add_lname
+         AND 	  DOB = add_DOB;
+    EXCEPTION
+        WHEN OTHERS
+        THEN
+            ln_patient_id := NULL;
+    END;
+
+    
+    IF ln_patient_id IS NULL
+    THEN
+        DBMS_OUTPUT.put_line ('No Patient Exists with the given name or DOB');
+    ---- Checking if the Hospital is valid to the affiliated Patient
+    ELSE
+        BEGIN
+            SELECT HOSPITAL_NAME
+              INTO lv_hospital_name
+              FROM hospital
+              ----reduces the complexity of the code needed in dynamic sql 'where' clause generation
+             WHERE 1 = 1 AND hospital_id = add_hospid_id;
+        EXCEPTION
+           WHEN OTHERS
+            THEN
+                lv_hospital_name := NULL;
+        END;
+
+        IF lv_hospital_name IS NULL
+        THEN
+            DBMS_OUTPUT.put_line ('Hospital ID is not valid');
+        ----Checking if Doctor ID is valid to the affiliated Hospital and Patient
+        ELSE
+            BEGIN
+                SELECT DOCTOR_ID
+                  INTO lv_doctor_name
+                  FROM hosp_doc
+                 WHERE     1 = 1
+                       AND hosp_doc.hospital_id = add_hospid_id
+                       AND hosp_doc.doctor_id = add_doctor_id;      
+            EXCEPTION
+                WHEN OTHERS
+                THEN
+                    lv_doctor_name := NULL;
+            END;
+
+            IF lv_doctor_name IS NULL
+            THEN
+                DBMS_OUTPUT.put_line ('Doctor ID is not affiliated with the respective hospital.');
+            ELSE ---- If all conditions satisfy then we insert a new row in the admission table
+                SELECT max(admission_id) INTO p_add_id FROM admission;
+
+                INSERT INTO ADMISSION (ADMISSION_ID,
+                                       PATIENT_ID,
+                                       HOSPITAL_ID,
+                                       DOCTOR_ID,
+                                       AD_DATE,
+                                       DIS_DATE,
+                                       REASON,
+                                       DISCHARGE_NOTE,
+                                       STATUS)
+                     VALUES (p_add_id+1,
+                             ln_patient_id,
+                             add_hospid_id,
+                             add_doctor_id,
+                             SYSDATE,
+                             NULL,
+                             add_reason,
+                             NULL,
+                             'admitted waiting for a room');
+
+                COMMIT;
+                 --- We then insert a row in the message table
+                SELECT msg_sequence.NEXTVAL INTO p_msg_id FROM DUAL;
+	        SELECT hospital.hospital_name, doctor.doctor_fname
+	        into h_name,d_name
+                from hospital,doctor
+                where hospital_id= add_hospid_id
+                and doctor_id=add_doctor_id;
+               
+                lv_meesage :=
+                       'Dr.'
+                    || d_name
+                    || ' : Patient '
+                    || add_fname
+                    || ' has been admitted into hospital '||h_name;
+ 
+                INSERT INTO MESSAGE
+                     VALUES (p_msg_id,
+                             add_doctor_id,
+                             ln_patient_id,
+                             lv_meesage,
+                             SYSDATE);
+DBMS_OUTPUT.put_line ('A new admission has been inserted. A new row has been inserted in the message table as well');
+                COMMIT;
+            END IF;
+        END IF;
+    END IF;
+END Feature2;
+/
+
+------Feature 3
+create or replace PROCEDURE feature3(admId IN INT, roomStartTime IN TIMESTAMP, roomEndTime IN TIMESTAMP, roomType IN VARCHAR) IS
+case1 NUMBER := 0;
+hosp_id NUMBER := 0;
+building_name VARCHAR(50) := 0;
+floor_id VARCHAR(50) := 0;
+room_type_check NUMBER := 0;
+
+CURSOR c1 IS SELECT par.room_num FROM patient_assign_room par, room r 
+    WHERE r.room_num = par.room_num AND r.room_type = roomType
+    AND r.hospital_id =(SELECT hospital_id FROM admission WHERE admission_id = admId) 
+    AND par.room_num NOT IN (SELECT room_num FROM patient_assign_room WHERE room_start_time <= roomEndTime
+    AND room_end_time >= roomStartTime);
+--(case2)The above cursor is used to extract the required room_num which satisfies the main problem statment.
+
+CURSOR c2 IS SELECT p.patient_id, p.patient_fname, p.patient_lname, a.doctor_id FROM admission a, patient p 
+    WHERE a.patient_id = p.patient_id AND a.admission_id = admId; 
+--The above cursor is used to extract the patient details (id & name) and doctor ID.
+
+--Note: Throughout the code, I have mentioned "case2", "case3", etc., which denotes the cases (or points) in the Feature3 problem statement.
+BEGIN
+    SELECT count(*) INTO case1 FROM admission WHERE admission_id = admId;
+    IF case1 = 0 THEN
+        dbms_output.put_line('Invalid admission ID');     --case1
+    ELSE
+        FOR p IN c1 LOOP
+            IF p.room_num IS NOT NULL THEN
+                room_type_check := 1;   --This variable is explained at the last.
+
+                SELECT hospital_id,building,floor INTO hosp_id, building_name, floor_id FROM room WHERE room_num = p.room_num;
+                dbms_output.put_line('Room number : ' || p.room_num);   --case3
+                dbms_output.put_line('Location : Hospital id '|| hosp_id|| ', building ' || building_name|| ', floor ' || floor_id);  --case3
+
+                INSERT INTO patient_assign_room VALUES(admId, p.room_num, roomStartTime, roomEndTime); --assigning the first available room to the admission.
+
+                FOR m IN c2 LOOP
+                    INSERT INTO message VALUES(MSG_SEQUENCE.nextval, m.doctor_id, m.patient_id,
+                    'Room '|| p.room_num || ' has been assigned to patient ' || m.patient_fname||' '||
+                    m.patient_lname|| ' from ' || roomStartTime || ' to ' || roomEndTime, SYSTIMESTAMP);    --case3
+                    
+                    UPDATE admission SET status = 'Room Assigned' where admission_id = admId;   --case4
+                END LOOP;
+                EXIT; --Exiting FOR loop because in the problem statement it says "assign the first available room to the admission". So if there are 2 rooms, we want the loop to stop after the assignment of the first room.
+            ELSE
+                dbms_output.put_line('No rooms are available at this moment');
+            END IF;
+        END LOOP;
+
+        --The below IF condition will check if the hospital (the admission belongs to) has the given room type.
+        --If yes, everything runs smoothly. If not, then the below code will run and print the message.
+        IF room_type_check <>1 THEN
+            dbms_output.put_line('No rooms are available for the given room type');
+        END IF;
+
+    END IF;
+
+END;
+/
+
+
+------Feature 4
+set serveroutput on;
+create or replace procedure Feature4
+(input_admission_id in int,
+input_treatment_id in int,
+input_treatment_date in timestamp
+)
+/* Variable declaration */
+IS
+valid_treatment_id int;
+valid_admission_id int;
+ad_patient_id int;
+ad_doctor_id int;
+t_treatment_name varchar(256);
+p_patinet_fname  varchar(256);
+p_patinet_lname  varchar(256);
+Begin
+select count(*) into valid_treatment_id from treatment where treatment_id = input_treatment_id;
+/* Condition 1 - Checks whether the treatment ID is valid */
+if valid_treatment_id = 0 then
+    dbms_output.put_line('Invalid treatment ID');
+    return;
+/* Condition 2 - Checks whether the Admission ID is valid */
+else
+        select count(*) into valid_admission_id from admission where admission_id = input_admission_id;
+        if valid_admission_id = 0 then
+        dbms_output.put_line('Invalid admission ID');
+        return;
+/* Condition 3 - Insert data into message and admission treatment table */
+        else
+        select patient_id,doctor_id into ad_patient_id, ad_doctor_id from admission where admission_id = input_admission_id;
+        select patient_fname,patient_lname into p_patinet_fname,p_patinet_lname from patient where patient_id = ad_patient_id;
+        select treatment_name into t_treatment_name from treatment where treatment_id = input_treatment_id;
+        insert into ad_treat values (input_admission_id,input_treatment_id,input_treatment_date);
+        insert into message values (msg_sequence.nextval, ad_doctor_id,ad_patient_id,'Patient ' ||p_patinet_fname ||' '||p_patinet_lname || ' received treatment ' || t_treatment_name ||' on ' || input_treatment_date ,systimestamp);
+        end if;
+    end if;
+end;
+/
+
+
+
+------Feature 5
+set serveroutput on;
+create or replace procedure Feature5
+(input_patient_id in int,
+input_drug_id_arr in input_drug_ids
+)
+/* Variable declaration */
+IS
+valid_Patient_id int;
+valid_drug_id int;
+valid_drug_pat int;
+drug_nm varchar(200);
+Begin
+/* Checking condition 1 -  Check whether the patient ID is valid */
+select count(*) into valid_patient_id from patient where patient_id = input_patient_id;
+if valid_patient_id = 0 then 
+    dbms_output.put_line('invalid patient ID'); 
+    return;
+else 
+    for i in 1..input_drug_id_arr.count LOOP
+        /* Checking condition 2 - Checks whether each drug ID is valid */ 
+        select count(*) into valid_drug_id from drug where drug_id = input_drug_id_arr(i);
+        if valid_drug_id = 0 then
+            dbms_output.put_line('invalid drug ID ' || input_drug_id_arr(i));
+        else
+            /* Checking condition 3 - Check whether the pair of patient ID, drug ID is already in the drug_allergy table */
+            select count(*) into valid_drug_pat from allergy where drug_id = input_drug_id_arr(i) and patient_id = input_patient_id;
+            if valid_drug_pat = 0 then 
+                /* Checking condition 4 - Inserting pair into allergy table */
+                insert into allergy values (input_patient_id,input_drug_id_arr(i),'HIGH');
+                select drug_name into drug_nm from drug where drug_id = input_drug_id_arr(i);
+                dbms_output.put_line('Allergy to drug ' || drug_nm || ' recorded');
+            else
+                dbms_output.put_line('Already inserted ' );
+            end if;
+        end if;
+    end loop;
+end if;
+end;
+/
+
+------Feature 6
+CREATE OR REPLACE PROCEDURE Mem4_FEATURE6_Neha (
+  Drg_Id               IN NUMBER,
+  Ad_Id                IN NUMBER,
+  Date_of_Presc        IN DATE,
+  No_of_Days_take_Drug IN NUMBER,
+  Number_of_Refills    IN NUMBER
+) AS
+--variable declaration
+  Count_Drug_Id      NUMBER;
+  Count_Admission_Id NUMBER;
+  Pat_FName          VARCHAR(30);
+  Pat_LName          VARCHAR(30);
+  Drg_Name           VARCHAR(30);
+  mesg               VARCHAR(120);
+  Pat_Id             NUMBER;
+  Doc_id             NUMBER;
+  v1                 NUMBER;
+ 
+  CURSOR C1 IS
+  SELECT p.Patient_id FROM patient   p, admission a
+  WHERE
+      p.patient_id = a.patient_id AND a.admission_id = Ad_id;
+
+BEGIN
+  SELECT COUNT(*) INTO Count_Drug_Id
+  FROM Drug
+  WHERE Drug_id = Drg_Id; --checks whether Drug ID is valid or not
+  IF Count_Drug_Id = 0 THEN
+    dbms_output.put_line('Invalid Drug Id');
+  ELSE  --dbms_output.put_line('Drug Id is valid');
+    SELECT COUNT(*) INTO Count_Admission_Id
+    FROM Admission
+    WHERE admission_id = Ad_Id;-- checks whether Admisssion ID is valid or not
+    IF Count_Admission_Id = 0 THEN
+      dbms_output.put_line('Invalid Admission Id');
+    ELSE
+      SELECT COUNT(*) INTO v1 FROM allergy al, admission a
+      WHERE al.patient_id = a.patient_id
+        AND al.drug_id = Drg_Id
+        AND a.admission_id = Ad_Id;-- checks if the given patient is allergic to the prescribed drug
+      IF v1 <> 0 THEN
+        SELECT Patient_fname, Patient_lname, Drug_name,a.doctor_id
+        INTO
+          Pat_FName, Pat_LName, Drg_Name, Doc_id
+        FROM
+          Patient p, admission a, allergy al, drug d
+        WHERE
+            p.patient_id = a.patient_id
+          AND p.patient_id = al.patient_id
+          AND al.drug_id = d.drug_id
+          AND al.drug_id = Drg_Id
+          AND a.admission_id = Ad_Id;
+  dbms_output.put_line('Patient '|| Pat_FName || ' ' || Pat_LName || ' is allergic to ' || Drg_Name || ', please choose another drug');
+     
+      ELSE
+        OPEN c1;
+        LOOP
+          FETCH c1 INTO Pat_Id;
+          EXIT WHEN c1%NOTFOUND;-- if the patient is not allergic to the prescribed drug, then it inserts a row in prescription table and message table.
+          INSERT INTO prescription VALUES (
+            prid_sequence.NEXTVAL,
+            Drg_Id,
+            Ad_Id,
+            Pat_Id,
+            Date_of_Presc,
+            No_of_Days_take_Drug,
+            Number_of_Refills
+          );
+
+        END LOOP;
+
+        CLOSE c1;
+        select drug_name into drg_name from drug where drug_id = drg_id;
+        mesg := 'A new prescription of '
+                || Drg_Name
+                || ' is created';
+        SELECT
+          doctor_id
+        INTO Doc_id
+        FROM
+          Admission
+        WHERE
+          admission_id = Ad_Id;
+
+        INSERT INTO message VALUES (
+          msg_sequence.NEXTVAL,
+          Doc_id,
+          Pat_Id,
+          mesg,
+          systimestamp
+        );
+      END IF;
+    END IF;
+  END IF;
+END;
+/
+
+------Feature 7
+--show rooms and patients a nurse is assigned to. Input includes a nurse ID and a specific time.
+create or replace procedure feature7_NA(n_id in number, s_time in timestamp) 
+is
+v_count int;
+cursor c1 is select r.room_num,n.nurse_fname,n.nurse_lname,r.building,r.floor,p.patient_fname,p.patient_lname  -- applying cursor for condition 3
+    from nurse n, shift_schedule ss, shift_room sr,room r,patient_assign_room pa, admission a, patient p where
+    n.nurse_id =n_id and
+    ss.nurse_id = n.nurse_id and
+    sr.nurse_id = ss.nurse_id and
+    r.room_num = sr.room_num and
+    pa.room_num = r.room_num and
+    pa.admission_id = a.admission_id and
+    a.patient_id = p.patient_id and
+    s_time between ss.start_time and ss.end_time;
+begin
+select count(*) into v_count from nurse where nurse_id = n_id; -- first condition checking if nurse ID is valid or not.
+if v_count =0 then
+    dbms_output.put_line('Invalid nurse ID');
+else
+select count(*) into v_count from shift_schedule ss, nurse n 
+where n.nurse_id = ss.nurse_id and 
+n.nurse_id=n_id and s_time between ss.start_time and ss.end_time; -- second condition checking if the timestamp given falles between the shift schedule of nurse assiged shift or not.
+if v_count = 0 then
+    dbms_output.put_line('Invalid shift schedule'); 
+else
+    for item in c1  -- prints the values of room,nurse name, location of the room, patient name when the procedure is called with correct inputs.
+    loop 
+    dbms_output.put_line('Room number' || item.room_num || ', nurse name:' || item.nurse_fname || ' ' || item.nurse_lname || ', location of room: ' || item.building || ', '|| 'floor: '|| item.floor || 
+    ', patient name:' || item.patient_fname || ',' || item.patient_lname);
+    end loop;
+end if;
+end if;
+end;
+/
+
+
+------Feature 8
+--discharge patient and update admission table and message table
+create or replace procedure feature8_DP(admin_id in int,discharge_date in timestamp, dis_note in varchar2) is
+a_count int;
+p_id admission.patient_id%type; -- patient ID
+d_id admission.doctor_id%type; -- doctor ID
+a_id admission.admission_id%type; -- admission ID
+treat_name treatment.treatment_name%type; -- treatment ID 
+t_date ad_treat.treat_date%type; -- treatment date
+d_name drug.drug_name%type; -- drug name
+d_duration prescription.drug_duration%type; -- drug prescription
+n_refills prescription.no_of_refills%type; -- no of refills
+d_dose drug.dosage%type; -- dosage
+day_intake drug.per_day_intake%type; 
+     cursor c2 is select t.treatment_name,ad.treat_date from treatment t, ad_treat ad, admission a where --  4. cursor for printing out treatment received,description of treatment and date of treatment. 
+     a.admission_id = ad.admission_id and
+     ad.treatment_id = t.treatment_id and
+     a.admission_id = admin_id and  
+     a.dis_date = discharge_date;
+     cursor c3 is select d.drug_name,p.drug_duration, p.no_of_refills,d.dosage,d.per_day_intake -- 5. cursor for printing out the prescription of the admin id provided.
+     from drug d, prescription p, admission a where
+     d.drug_id=p.drug_id and
+     p.admission_id = a.admission_id and
+     a.admission_id = admin_id and
+     a.dis_date = discharge_date;
+     
+begin
+    select count(*) into a_count from admission where admission_id = admin_id; -- 1. condition checks if the admission ID is valid or not.
+    if a_count = 0 then 
+        dbms_output.put_line('invalid admission id'); --prints error message
+    else
+        update admission set dis_date = discharge_date,discharge_note = dis_note, status = 'discharged' where admission_id = admin_id; 
+        select doctor_id,patient_id into d_id,p_id from admission where admission_id = admin_id; -- 2. query updates the admission table with discharge note and date.
+    end if;
+    insert into message values (msg_sequence.nextval,d_id,p_id,'patient discharged on :' || sysdate , systimestamp);    -- condition 3 inserts a message in message table. 
+     
+     for k in c2 LOOP
+         dbms_output.put_line('list of treatment received: ' || k.treatment_name || 'date of treatment: ' || k.treat_date); -- condtion 4 uses cursor to print the treatments received by the user
+     END loop;
+     
+    for l in c3 loop
+        dbms_output.put_line('prescription'); -- condition 5 prints out the prescription of the customer how is qualified.
+        dbms_output.put_line('-------------------------------');
+        dbms_output.put_line('drug name: '|| l.drug_name);
+        dbms_output.put_line('duration of the prescription: ' || l.drug_duration);
+        dbms_output.put_line('no of refills: ' || l.no_of_refills);
+        dbms_output.put_line('dosage value: ' || l.dosage);
+        dbms_output.put_line('dose per day: ' || l.per_day_intake);
+    end loop;
+end;
+/
+
+
+
+
+--------------- GROUP FEATURES
+
+
+-------Feature 9
+create or replace procedure feature9_CT(p_fname in varchar2, p_lname in varchar2, birth_date in date, input_date in timestamp)
+is
+cursor c1 is select d.doctor_fname,d.doctor_lname,p.patient_fname,p.patient_lname,pa.room_num,pa.room_start_time,pa.room_end_time from -- condition 3 
+admission a, patient p, doctor d, patient_assign_room pa where
+p.patient_fname = p_fname and
+p.patient_lname = p_lname and
+a.doctor_id = d.doctor_id and
+a.patient_id = p.patient_id and
+a.admission_id = pa.admission_id;
+cursor c2 is select n.nurse_fname,n.nurse_lname,ss.start_time,ss.end_time,p.patient_fname,p.patient_lname   -- condition 4
+                from shift_schedule ss, nurse n, hospital h, admission a, patient p, patient_assign_room pa, room r  where
+                ss.nurse_id = n.nurse_id and
+                n.hospital_id = h.hospital_id and
+                h.hospital_id = a.hospital_id and
+                a.patient_id = p.patient_id and
+                pa.admission_id = a.admission_id and
+                r.room_num = pa.room_num and
+                p.patient_fname= p_fname and
+                p.patient_lname = p_lname and
+                pa.room_start_time < = ss.end_time and pa.room_end_time > = ss.start_time;    
+--variables declaration
+v_count int;
+n_fname nurse.nurse_fname%type;
+n_lname nurse.nurse_lname%type;
+s_time shift_schedule.start_time%type;
+e_time shift_schedule.end_time%type;
+r_number patient_assign_room.room_num%type;
+begin
+    select count(*) into v_count from patient p where patient_fname = p_fname and patient_lname = p_lname and dob = birth_date; -- condition 1 checks if the patient name given as input is valid or not
+    if v_count = 0 then
+        dbms_output.put_line('invalid patient name'); -- error statement for invalid patient name
+    else
+        select count(*) into v_count from patient p, admission a where  -- condition 2 if patient name is valid, checks if the patient is admitted for the given input time in the procedure
+        p.patient_id = a.patient_id and
+        p.patient_fname = p_fname and
+        p.patient_lname = p_lname and
+        input_date between a.ad_date and a.dis_date;
+        if v_count = 0 then
+            dbms_output.put_line('This patient is not in hospital that day'); -- print error message for patient how is not admitted for the given input time.
+        else
+            for i in c1 -- cursor for condition 3 this condition prints the valid doctor assigned to the patient for the given input name at given time
+            loop
+                dbms_output.put_line('Room assigned to patient: ' || i.patient_fname || ' ' || i.patient_lname);                
+                dbms_output.put_line('Name of the doctor: '|| i.doctor_fname || ' ' || i.doctor_lname);
+                dbms_output.put_line('Room number: '|| i.room_num);
+                dbms_output.put_line('Room allocated time : ' || i.room_start_time || ' ' || i.room_end_time);
+            end loop;
+            for k in c2 -- this condition prints out the name of the nurse assigned to the patient as well as nurse shift start and end time that overlaps with the patient assigned for the input time.
+            loop
+                dbms_output.put_line('nurse name: ' || k.nurse_fname ||' '|| k.nurse_lname );
+                dbms_output.put_line('nurse shift timings: ' || k.start_time ||' '|| k.end_time );
+             end loop;
+        end if;
+    end if;
+end;
+/
+
+
+-------Feature 10
+--procedure for room stats where time and hospital id is given as input for the procedure
+create or replace procedure FEATURE10_RS(s_date in timestamp, e_date in timestamp,hosp_id in int) as
+/* Creating Variables */
+v_count int;
+v_sum int := 0;
+no_of_days int :=0;
+total_days int;
+occupancy_rate float;
+room_id int;
+room_tp varchar(200);
+room_bld varchar(20);
+room_floor int;
+start_time timestamp;
+end_time timestamp;
+/*Cursor to get all the rooms */
+cursor c2 is select r.room_num,r.room_type,r.building,r.floor from hospital h,room r where h.hospital_id = r.hospital_id and h.hospital_id = hosp_id;
+begin
+/* Condition to validate hospital ID */
+select count(*) into v_count from hospital where hospital_id = hosp_id;
+if v_count = 0 then
+    dbms_output.put_line('Invalid hospital ID');
+else
+/* Finding the occupancy for each room for each day within the given start and end date*/
+no_of_days := trunc(e_date) - trunc(s_date);
+open c2;
+Loop
+fetch c2 into room_id,room_tp,room_bld,room_floor;
+exit when c2%notfound;
+    /* v_sum is the sum of days for a room on which it is occupied */
+    v_sum:=0;
+    for i in 0 .. no_of_days LOOP
+        start_time := s_date + NUMTODSINTERVAL(i, 'DAY');
+        end_time := s_date + interval '23' hour + interval '59' minute + NUMTODSINTERVAL(i,'DAY');
+        v_count:=0;
+        /* Condition to check if a room is occupied on the given day */
+         select count(*) into v_count from patient_assign_room pa ,hospital h,room r where
+         pa.room_num = r.room_num and r.hospital_id = h.hospital_id and pa.room_num = room_id and h.hospital_id = hosp_id and
+        ((room_start_time between start_time and end_time) or
+        (room_end_time between start_time and end_time) or
+        (room_start_time <= (start_time) and room_end_time >= (end_time))) ;
+        if v_count!= 0 then
+            v_sum := v_sum+1;
+        end if;
+    end loop;
+    /*Calculating the occupancy for each room*/
+    occupancy_rate :=  (v_sum/(no_of_days+1));
+    dbms_output.put_line('Room number: ' || room_id || ' Room Type: '||room_tp || ' Room Location: ' || room_bld
+    || ' '|| room_floor ||' Occupancy Rate: ' || occupancy_rate );
+end loop;
+close c2;
+end if;
+end;
+/
+
+
+-------Feature 11
+create or replace PROCEDURE Feature11(hospId IN NUMBER, startDate IN DATE, endDate IN DATE) IS
+case1 NUMBER := 0;
+inputStartTime TIMESTAMP;
+inputEndTime TIMESTAMP;
+tempHours NUMBER := 0;
+nurseHours NUMBER := 0;
+sumHours NUMBER := 0;
+tempNurseId NUMBER := 0;
+numberOfDays NUMBER := 0;
+nurseCount NUMBER := 0;
+
+CURSOR nurseShiftCursor IS SELECT n.nurse_id, n.nurse_fname, n.nurse_lname, ss.start_time, ss.end_time
+    FROM nurse n, hospital h, shift_schedule ss 
+    WHERE h.hospital_id = n.hospital_id
+    AND n.nurse_id = ss.nurse_id 
+    AND h.hospital_id = hospId 
+    order by n.nurse_id; --This cursor will hold the details about the nurse and the nurse's shift timings
+    
+--Note: Throughout the code, it is mentioned "case2", "case3", etc., which denotes the cases (or points) in the Feature3 problem statement.
+BEGIN
+    --Adding 8AM to both start date and end date.
+    inputStartTime := to_TIMESTAMP(to_char(startDate) || ' 8:00:00');
+    inputEndTime := to_TIMESTAMP(to_char(endDate) || ' 8:00:00');
+
+    SELECT endDate - startDate INTO numberOfDays FROM dual; --(case3) counts the number of days from the start date to the end date.
+
+    SELECT count(*) INTO case1 FROM hospital WHERE hospital_id = hospId;
+    IF case1 = 0 THEN
+        dbms_output.put_line('Invalid hospital ID');     --case1
+    ELSE    
+        FOR y IN nurseShiftCursor LOOP
+            nurseCount := nurseCount + 1;
+
+            --Below IF condition handles the condition if a nurse works for more than a day during the given duration (between start date and end date)
+            IF tempNurseId <> y.nurse_id THEN
+                nurseHours := 0;
+                tempNurseId := y.nurse_id;
+            END IF;
+
+            IF y.start_time > inputStartTime AND y.end_time < inputEndTime THEN    -- normal routine (Nurse starts shift after the input startTime and ends before the input endTime)                
+                SELECT EXTRACT(DAY FROM(ss.end_time - ss.start_time))*24 +
+                    EXTRACT(HOUR FROM(ss.end_time - ss.start_time)) +
+                    EXTRACT(MINUTE FROM(ss.end_time - ss.start_time))/60 into tempHours 
+                    FROM nurse n, shift_schedule ss 
+                    where n.nurse_id = ss.nurse_id
+                    and n.nurse_id = y.nurse_id;
+                nurseHours := nurseHours + tempHours;                
+
+            ELSIF y.start_time < inputStartTime AND y.end_time > inputStartTime THEN  -- if a shift starts before 8 am on the start date
+                SELECT EXTRACT(DAY FROM(ss.end_time - inputStartTime))*24 +
+                    EXTRACT(HOUR FROM(ss.end_time - inputStartTime)) +
+                    EXTRACT(MINUTE FROM(ss.end_time - inputStartTime))/60 into tempHours
+                    FROM nurse n, shift_schedule ss 
+                    where n.nurse_id = ss.nurse_id 
+                    and n.nurse_id = y.nurse_id;
+                nurseHours := nurseHours + tempHours;                
+
+            ELSIF y.end_time > inputEndTime AND y.start_time < inputEndTime THEN    -- if a shift ends after 8 am on the end date                
+                SELECT EXTRACT(DAY FROM(inputEndTime - ss.start_time))*24 +
+                    EXTRACT(HOUR FROM(inputEndTime - ss.start_time)) +
+                    EXTRACT(MINUTE FROM(inputEndTime - ss.start_time))/60 into tempHours
+                    FROM nurse n, shift_schedule ss 
+                    where n.nurse_id = ss.nurse_id 
+                    and n.nurse_id = y.nurse_id;
+                nurseHours := nurseHours + tempHours;
+
+            ELSE    --No nurse works during the given duration
+                dbms_output.put_line('None of the nurses work during the given duration');
+                nurseCount := 0;
+            END IF;
+
+    
+            dbms_output.put_line('The average number of hours per day the nurse ' || y.nurse_fname || ' ' || y.nurse_lname
+                                || ' is working = ' || nurseHours/numberOfDays);
+            sumHours := sumHours + nurseHours;
+        END LOOP;
+    END IF;
+    
+    dbms_output.put_line('The average number of hours work per day for all nurses = ' || sumHours/nurseCount);
+    
+    EXCEPTION
+    WHEN ZERO_DIVIDE THEN
+        DBMS_OUTPUT.PUT_LINE('There are no nurses in the given hospital');
+END;
+/
+
+
+-------Feature 12
+create or replace procedure feature12_RA(input_interval in interval day to second)
+IS
+dis_date_v timestamp;
+ad_date_v timestamp;
+reason_1 varchar(200);
+reason_2 varchar(200);
+hosp_name varchar(200);  
+patient_fnm varchar(200);
+patient_lnm varchar(200);
+hosp_id int;
+cnt_readmission int;
+readmission_rate float;
+total_patients int;
+Cursor c1 is select a1.dis_date,a2.ad_date,a1.reason,a2.reason,p.patient_fname,p.patient_lname from admission a1, admission a2, patient p where 
+a1.patient_id = a2.patient_id and a1.admission_id<>a2.admission_id and a1.patient_id = p.patient_id and a2.patient_id = p.patient_id and
+a1.dis_date < a2.ad_date and a2.ad_date - a1.dis_date < = input_interval;
+Cursor c2 is select hospital_id, hospital_name from hospital;
+Begin
+open c1;
+Loop
+fetch c1 into dis_date_v, ad_date_v, reason_1, reason_2,patient_fnm,patient_lnm;
+exit when c1%notfound;
+    dbms_output.put_line('Patient Name: '|| patient_fnm || ' '|| patient_lnm||' Discharge Date: ' || dis_date_v || ' Admission Date: ' || ad_date_v || ' Reason 1: ' || reason_1 || ' Reason 2: ' || reason_2 );
+end loop;
+close c1;
+open c2;
+loop
+fetch c2 into hosp_id, hosp_name;
+exit when c2%notfound;
+    select count(*) into cnt_readmission from admission a1, admission a2 where a1.patient_id = a2.patient_id and a1.admission_id<>a2.admission_id
+    and a1.dis_date< a2.ad_date and a2.ad_date - a1.dis_date <= input_interval and a1.hospital_id = hosp_id;
+    select count(distinct(patient_id)) into total_patients from admission where hospital_id = hosp_id;
+    readmission_rate := cnt_readmission/total_patients;
+    dbms_output.put_line('Hospital Name: ' || hosp_name || ' readmission rate: ' || readmission_rate);
+end loop;
+close c2;
+end;
+/
